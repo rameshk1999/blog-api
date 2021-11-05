@@ -48,6 +48,12 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 });
 
 // routess
+app.get("/", (req, res) => {
+  res.json({
+    msg: "Hello from API",
+    status: 200,
+  });
+});
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
