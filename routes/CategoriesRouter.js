@@ -10,7 +10,7 @@ router.post("/create", async (req, res) => {
 
   try {
     const savedCat = await newCat.save();
-    res.status(201).json({
+    return res.status(201).json({
       msg: "category created.",
       data: savedCat,
     });

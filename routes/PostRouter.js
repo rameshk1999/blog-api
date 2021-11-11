@@ -119,7 +119,7 @@ router.get("/getall", async (req, res) => {
       posts = await Post.find();
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       data: posts,
       status: 200,
     });

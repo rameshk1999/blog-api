@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const cors = require("cors");
 dotenv.config();
 
 // routers
@@ -18,6 +19,7 @@ const Db_url =
 
 // middleware
 app.use(express.json());
+app.use(cors());
 
 // Db connect
 mongoose
