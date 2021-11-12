@@ -32,34 +32,48 @@ router.put("/:id", async (req, res) => {
 
 // delete
 router.delete("/:id", async (req, res) => {
-  try {
-    const user = await User.findById({ _id: req.params.id });
-    const validate = await bcrypt.compare(req.body.password, user.password);
+  console.log(
+    req.body,
+    req.params.id,
+    typeof req.params.id,
+    req.params.id === req.body.userId
+  );
 
-    if (!user) {
-      return res.status(404).json({ status: 404, msg: "wrong Credentials" });
-    }
+  if (req.body.userId === req.params.id) {
+    try {
+      const user = await User.findById({ _id: req.params.id });
+      const validate = await bcrypt.compare(req.body.password, user.password);
 
-    if (!validate) {
-      return res.status(404).json({ staus: 404, msg: "unauthorized" });
-    }
-    if (user && validate) {
-      try {
-        await Post.deleteMany({ username: user.username });
-        await User.findByIdAndDelete(req.params.id);
-
-        return res.status(200).json({
-          status: 200,
-          msg: "Account Deleted",
-        });
-      } catch (error) {
-        res.status(500).json(error);
+      if (!user) {
+        return res.status(404).json({ status: 404, msg: "wrong Credentials" });
       }
+
+      if (!validate) {
+        return res.status(404).json({ staus: 404, msg: "unauthorized" });
+      }
+
+      if (user && validate) {
+        try {
+          await Post.deleteMany({ username: user.username });
+          await User.findByIdAndDelete(req.params.id);
+
+          return res.status(200).json({
+            status: 200,
+            msg: "Account Deleted",
+          });
+        } catch (error) {
+          res.status(500).json(error);
+        }
+      }
+    } catch (error) {
+      res.status(404).json({
+        msg2: error.message,
+        msg: "User not found",
+      });
     }
-  } catch (error) {
-    res.status(404).json({
-      msg2: error.message,
-      msg: "User not found",
+  } else {
+    res.status(401).json({
+      msg: "You are not authorized",
     });
   }
 });
