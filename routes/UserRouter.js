@@ -37,11 +37,11 @@ router.delete("/:id", async (req, res) => {
     const validate = await bcrypt.compare(req.body.password, user.password);
 
     if (!user) {
-      return res.status(404).json({ msg: "wrong Credentials" });
+      return res.status(404).json({ status: 404, msg: "wrong Credentials" });
     }
 
     if (!validate) {
-      return res.status(404).json({ msg: "wrong Credentials" });
+      return res.status(404).json({ staus: 404, msg: "unauthorized" });
     }
     if (user && validate) {
       try {
