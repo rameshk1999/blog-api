@@ -32,27 +32,33 @@ router.put("/:id", async (req, res) => {
 
 // delete
 router.delete("/:id", async (req, res) => {
-  if (req.body.userId === req.params.id) {
-    try {
-      const user = await User.findById(req.params.id);
+  try {
+    const user = await User.findById({ _id: req.params.id });
+    const validate = await bcrypt.compare(req.body.password, user.password);
+
+    if (!user) {
+      return res.status(404).json({ msg: "wrong Credentials" });
+    }
+
+    if (!validate) {
+      return res.status(404).json({ msg: "wrong Credentials" });
+    }
+    if (user && validate) {
       try {
         await Post.deleteMany({ username: user.username });
         await User.findByIdAndDelete(req.params.id);
 
         return res.status(200).json({
+          status: 200,
           msg: "Account Deleted",
         });
       } catch (error) {
         res.status(500).json(error);
       }
-    } catch (error) {
-      res.status(404).json({
-        msg: "User not found",
-      });
     }
-  } else {
-    return res.status(401).json({
-      msg: "You are not authorized",
+  } catch (error) {
+    res.status(404).json({
+      msg: "User not found",
     });
   }
 });
