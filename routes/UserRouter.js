@@ -61,9 +61,18 @@ router.delete("/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   if (req.params.id) {
     try {
-      const user = await User.findById(req.params.id);
-      const { password, ...others } = user._doc;
-      return res.status(200).json(others);
+      const user = await User.findById({ _id: req.params.id });
+      const validate = await bcrypt.compare(req.body.password, user.password);
+
+      !user && res.status(404).json({ msg: "wrong Credentials" });
+
+      if (!validate) {
+        return res.status(404).json({ msg: "wrong Credentials" });
+      }
+      if (user && validate) {
+        const { password, username, ...others } = user;
+        return res.status(200).json({ status: 200, msg: username });
+      }
     } catch (error) {
       res.status(500).json(error.message);
     }
