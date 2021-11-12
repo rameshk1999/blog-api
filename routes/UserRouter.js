@@ -58,7 +58,7 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (error) {
     res.status(404).json({
-      msg2: error,
+      msg2: error.message,
       msg: "User not found",
     });
   }
