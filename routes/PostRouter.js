@@ -55,6 +55,46 @@ router.put("/update/:id", async (req, res) => {
   }
 });
 
+// like post
+router.put("/like", async (req, res) => {
+  const post = await Post.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $push: { likes: req.body.userId },
+    },
+    { new: true }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({
+        msg: err,
+        status: 422,
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+// unlike post
+router.put("/unlike", async (req, res) => {
+  const post = await Post.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $pull: { likes: req.body.userId },
+    },
+    { new: true }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({
+        msg: err,
+        status: 422,
+      });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 // delete post
 router.delete("/delete/:id", async (req, res) => {
   try {

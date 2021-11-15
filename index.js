@@ -9,7 +9,6 @@ dotenv.config();
 const authRouter = require("./routes/authRouter.js");
 const userRouter = require("./routes/UserRouter.js");
 const postRouter = require("./routes/PostRouter.js");
-const likesRouter = require("./routes/likes/LikesRouter.js");
 const categoryRouter = require("./routes/CategoriesRouter.js");
 
 // app
@@ -61,7 +60,6 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
-app.use("/api/likes", likesRouter);
 app.use("/api/categories", categoryRouter);
 
 app.listen(port, () => {
