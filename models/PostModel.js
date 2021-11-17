@@ -27,10 +27,9 @@ const PostSchema = new mongoose.Schema(
     comments: [
       {
         text: String,
-        postedBy: {
-          type: String,
-          ref: "User",
-        },
+        postedBy: String,
+        postById: String,
+        profile: String,
       },
     ],
   },

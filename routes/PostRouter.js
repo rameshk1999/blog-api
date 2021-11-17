@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/UserModel.js");
 const Post = require("../models/PostModel.js");
 const bcrypt = require("bcrypt");
+const UserModel = require("../models/UserModel.js");
 
 // create post
 router.post("/create", async (req, res) => {
@@ -97,32 +98,35 @@ router.put("/unlike", async (req, res) => {
 
 // comment post
 router.put("/comment", async (req, res) => {
+  // const user = await UserModel.findById(req.body.userId);
+  // user && console.log("user", user);
   const comment = {
     text: req.body.text,
-    postedBy: req.body.userId,
+    postedBy: req.body.username,
+    postById: req.body.userId,
+    profile: req.body.profile,
   };
+
   const post = await Post.findByIdAndUpdate(
     req.body.postId,
     {
       $push: { comments: comment },
     },
     { new: true }
-  )
-    .populate("comments.postedBy", "_id username")
-    .exec((err, result) => {
-      if (err) {
-        return res.status(422).json({
-          msg: err.message,
-          status: 422,
-        });
-      } else {
-        res.status(201).json({
-          msg: "Comment added",
-          status: 201,
-          data: result,
-        });
-      }
-    });
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({
+        msg: err.message,
+        status: 422,
+      });
+    } else {
+      res.json({
+        msg: "Comment added",
+        status: 201,
+        data: result,
+      });
+    }
+  });
 });
 
 // delete post
