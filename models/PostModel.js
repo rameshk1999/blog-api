@@ -24,6 +24,15 @@ const PostSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    comments: [
+      {
+        text: String,
+        postedBy: {
+          type: String,
+          ref: "User",
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

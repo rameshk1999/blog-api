@@ -95,6 +95,36 @@ router.put("/unlike", async (req, res) => {
   });
 });
 
+// comment post
+router.put("/comment", async (req, res) => {
+  const comment = {
+    text: req.body.text,
+    postedBy: req.body.userId,
+  };
+  const post = await Post.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $push: { comments: comment },
+    },
+    { new: true }
+  )
+    .populate("comments.postedBy", "_id username")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(422).json({
+          msg: err.message,
+          status: 422,
+        });
+      } else {
+        res.status(201).json({
+          msg: "Comment added",
+          status: 201,
+          data: result,
+        });
+      }
+    });
+});
+
 // delete post
 router.delete("/delete/:id", async (req, res) => {
   try {
