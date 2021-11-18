@@ -34,7 +34,7 @@ router.get("/getuserdata/:id", async (req, res) => {
       !user && res.status(404).json({ msg: "wrong Credentials" });
       //if (user) {
       const { username, password, ...others } = user._doc;
-      user && res.status(200).json({ status: 200, msg: others });
+      user && res.status(200).json({ status: 200, data: others });
       // }
     } catch (error) {
       res.status(500).json({ status: 500, error: error.message });
