@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const User = require("../models/UserModel.js");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const token = process.env.SECRET_KEY || "welovejavascript";
 
 // register
 router.post("/register", async (req, res) => {
@@ -50,12 +53,14 @@ router.post("/login", async (req, res) => {
     if (!validate) {
       return res.status(404).json({ msg: "wrong Credentials" });
     }
-
     const { password, ...others } = user._doc;
     if (user && validate) {
+      const usertoken = jwt.sign({ _id: others._id }, token);
+
       return res.status(200).json({
         msg: "Login Succesful",
         data: others,
+        token: usertoken,
       });
     }
   } catch (error) {
