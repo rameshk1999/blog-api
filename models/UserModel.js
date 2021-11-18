@@ -20,6 +20,18 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    likedPosts: [
+      {
+        postId: String,
+        postImage: String,
+      },
+    ],
+    savedPosts: [
+      {
+        postId: String,
+        postImage: String,
+      },
+    ],
   },
   { timestamps: true }
 );
