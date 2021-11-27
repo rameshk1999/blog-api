@@ -9,9 +9,9 @@ const crypto = require("crypto");
 // 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
 
 var transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: "outlook",
   auth: {
-    user: "rameshtechhub@gmail.com",
+    user: "kasularamesh@outlook.com",
     pass: "Captain@7337",
   },
 });
@@ -95,7 +95,7 @@ router.post("/login", async (req, res) => {
     if (!validate) {
       return res.status(404).json({ msg: "wrong Credentials" });
     }
-    const { password, ...others } = user._doc;
+    const { password, emailToken, ...others } = user._doc;
     if (user && validate) {
       const usertoken = jwt.sign({ _id: others._id }, token);
 
