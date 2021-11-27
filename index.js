@@ -57,6 +57,8 @@ app.get("/", (req, res) => {
   });
 });
 
+// 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
+
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);

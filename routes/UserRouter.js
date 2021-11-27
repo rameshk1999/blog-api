@@ -173,4 +173,45 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// verify email
+router.get("/verify/:id", async (req, res, next) => {
+  const RandomToken = req.params.id;
+  const username = req.query.username;
+
+  const isUser = await User.findOne({ username: username });
+  try {
+    !isUser &&
+      res.status(404).json({
+        msg: "Invalid Credentials",
+        status: 404,
+      });
+    const { username, emailToken, password, ...others } = isUser._doc;
+
+    isUser &&
+      User.findByIdAndUpdate(
+        { _id: others._id },
+        { $set: { isEmailVerified: true } }
+      )
+        .then((resp) => {
+          return res.status(200).json({
+            msg: "Email verified!",
+            status: 200,
+          });
+        })
+        .catch((error) => {
+          res.status(500).json({
+            status: 500,
+            msg: error.message,
+          });
+          next();
+        });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      msg: error.message,
+    });
+    next();
+  }
+});
+
 module.exports = router;
