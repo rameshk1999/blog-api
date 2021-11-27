@@ -106,7 +106,7 @@ router.post("/login", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
-      msg: "Try Later",
+      msg: error.message,
       status: 500,
     });
   }

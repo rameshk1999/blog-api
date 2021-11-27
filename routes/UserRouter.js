@@ -191,8 +191,7 @@ router.get("/verify/:id", async (req, res, next) => {
       RandomToken === emailToken &&
       User.findByIdAndUpdate(
         { _id: others._id },
-        { $set: { isEmailVerified: true } },
-        { $set: { emailToken: "" } }
+        { $set: { isEmailVerified: true } }
       )
         .then(() => {
           return res.status(200).json({
