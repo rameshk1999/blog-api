@@ -49,7 +49,7 @@ router.post("/register", async (req, res) => {
       subject: "signup successfull!!",
       html: `<div>
       <h1>welcome to instagram.</h1> 
-      <a href=http://localhost:3000/${RandomToken}?username=${req.body.username} style={{
+      <a href=https://react-social-blog.vercel.app/${RandomToken}?username=${req.body.username} style={{
         background-color: #4CAF50; 
         border: none;
         color: white;
