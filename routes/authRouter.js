@@ -9,9 +9,9 @@ const crypto = require("crypto");
 // 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
 
 var transporter = nodemailer.createTransport({
-  service: "outlook",
+  service: "Gmail",
   auth: {
-    user: "kasularamesh@outlook.com",
+    user: "rameshtechhub@gmail.com",
     pass: "Captain@7337",
   },
 });
@@ -58,7 +58,7 @@ router.post("/register", async (req, res) => {
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
-      }} target="_blank">click the linkto verify</a> </div>`,
+      }} target="_blank">click the link to verify</a> </div>`,
     };
 
     await newUser.save().then((user) => {
@@ -66,15 +66,14 @@ router.post("/register", async (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          console.log("Email sent: " + info.response);
+          return res.status(200).json({
+            msg: "user created",
+            status: 200,
+            isEmailSent: true,
+            // data: userData,
+          });
         }
       });
-    });
-
-    return res.status(200).json({
-      msg: "user created",
-      status: 200,
-      // data: userData,
     });
   } catch (error) {
     return res.status(500).json({

@@ -188,11 +188,13 @@ router.get("/verify/:id", async (req, res, next) => {
     const { username, emailToken, password, ...others } = isUser._doc;
 
     isUser &&
+      RandomToken === emailToken &&
       User.findByIdAndUpdate(
         { _id: others._id },
-        { $set: { isEmailVerified: true } }
+        { $set: { isEmailVerified: true } },
+        { $set: { emailToken: "" } }
       )
-        .then((resp) => {
+        .then(() => {
           return res.status(200).json({
             msg: "Email verified!",
             status: 200,
