@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 const UserSchema = new mongoose.Schema(
   {
@@ -36,6 +37,16 @@ const UserSchema = new mongoose.Schema(
       {
         postId: String,
         postImage: String,
+      },
+    ],
+    followers: [
+      {
+        type: String,
+      },
+    ],
+    following: [
+      {
+        type: String,
       },
     ],
   },

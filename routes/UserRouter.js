@@ -16,7 +16,7 @@ router.get("/:id", async (req, res) => {
       //   return res.status(404).json({ msg: "wrong Credentials" });
       // }
       if (user) {
-        const { password, username, ...others } = user._doc;
+        const { password, emailToken, isEmailVerified, ...others } = user._doc;
         return res.status(200).json({ status: 200, msg: others });
       }
     } catch (error) {
@@ -31,9 +31,9 @@ router.get("/getuserdata/:id", async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       console.log(user ? "true" : "false");
-      !user && res.status(404).json({ msg: "wrong Credentials" });
+      !user && res.status(404).json({ msg: "Not found" });
       //if (user) {
-      const { username, password, ...others } = user._doc;
+      const { password, ...others } = user._doc;
       user && res.status(200).json({ status: 200, data: others });
       // }
     } catch (error) {
@@ -212,6 +212,127 @@ router.get("/verify/:id", async (req, res, next) => {
       msg: error.message,
     });
     next();
+  }
+});
+
+router.put("/follow", async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.body.followId,
+      {
+        $push: { followers: req.body.funId },
+      },
+      { new: true }
+    );
+
+    const newUser = await User.findByIdAndUpdate(
+      req.body.funId,
+      {
+        $push: {
+          following: req.body.followId,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    user &&
+      res.status(200).json({
+        msg: "Following",
+        status: 200,
+      });
+
+    !user &&
+      res.staus(422).json({
+        msg: "Not authorized",
+        status: 422,
+      });
+
+    user &&
+      newUser &&
+      res.status(200).json({
+        msg: "Following",
+        status: 200,
+      });
+
+    !newUser &&
+      res.staus(422).json({
+        msg: "Not authorized",
+        status: 422,
+      });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Try Later!",
+      status: 500,
+    });
+  }
+});
+
+router.put("/unfollow", async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.body.unfollowId,
+      {
+        $pull: { followers: req.body.funId },
+      },
+      { new: true }
+    );
+
+    const newUser = await User.findByIdAndUpdate(
+      req.body.funId,
+      {
+        $pull: {
+          following: req.body.unfollowId,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    user &&
+      res.status(200).json({
+        msg: "Following",
+        status: 200,
+      });
+
+    !user &&
+      res.staus(422).json({
+        msg: "Not authorized",
+        status: 422,
+      });
+
+    user &&
+      newUser &&
+      res.status(200).json({
+        msg: "Following",
+        status: 200,
+      });
+
+    !newUser &&
+      res.staus(422).json({
+        msg: "Not authorized",
+        status: 422,
+      });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Try Later!",
+      status: 500,
+    });
+  }
+});
+
+// get all users
+router.get("/allusers", async (req, res, next) => {
+  try {
+    const result = await User.find({});
+    console.log("result", result);
+  } catch (error) {
+    res.status(500).json({
+      msg: "Try later",
+      name: error.message,
+    });
   }
 });
 
